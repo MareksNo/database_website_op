@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <div align="center">
+        <h1>Welcome to Data Shop!</h1>
+        <div class="container">
+            <fieldset class="form-group">
+                <div>
+                    <form action="" method="post">
+                        {{ form.search_name.label }}
+                        {{ form.search_name }}
+                        <input type="submit" name="search_product" class="btn btn-outline-info" value="Search">
+                    </form>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <div class="container">
+        {% for product in products %}
+        <div class="content-section">
+            <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
+            <div>{{ product.price }}$</div>
+            <div>{{ product.seller.username }}</div>
+        </div>
+        {% endfor %}
+    </div>
+        {% for stink in stinky_poopy %}
+            <div>{{ stink }}</div>
+        {% endfor %}
+</body>
+</html>
+{% endblock %}

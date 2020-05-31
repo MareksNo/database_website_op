@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <body>
+        {% for product in products %}
+        <div class="content-section">
+            <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
+            <div>{{ product.price }}$</div>
+            <div>{{ product.seller.username }}</div>
+        </div>
+        {% endfor %}
+    </body>
+{% endblock %}

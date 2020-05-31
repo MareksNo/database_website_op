@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<body>
+    <div align="center">
+        <h1>Name: {{ product.product_name }}</h1>
+    </div>
+    <font size="30">
+        <div>
+            Price: {{ product.price }}$
+        </div>
+        <div>
+            Seller {{ product.seller.username }}
+        </div>
+    </font>
+</body>
+</html>
+{% endblock %}
