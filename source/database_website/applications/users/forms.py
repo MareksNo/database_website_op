@@ -59,11 +59,9 @@ class LoginForm(FlaskForm):
 
     def validate_email(self, email):
         user = models.User.query.filter_by(email=email.data).first()
-        try:
-            if user is None:
-                raise LoginException('Such user not found')
-        except LoginException as exception:
-            flash(message=str(exception))
+
+        if user is None:
+            raise ValidationError('Such user not found')
 
     def login(self, user):
         if check_password_hash(user.password, self.password.data):
@@ -77,4 +75,3 @@ class LoginForm(FlaskForm):
         else:
             raise LoginException('Wrong Password')
 
-# Needs models import

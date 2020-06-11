@@ -41,11 +41,13 @@ class LoginView(MethodView, FormViewMixin):
             try:
                 form.login(user)
                 return redirect(url_for('core.home_page'))
+
             except LoginException as exception:
-                flash(message=str(exception))
+                print(form.password.errors)
+                flash(message=str(exception), category='danger')
 
         flash('Wrong Credentials!', category='danger')
-        return render_template(self.template_name, title=self.title, form=self.form_class())
+        return render_template(self.template_name, title=self.title, form=form)
 
 
 class LogoutView(MethodView):

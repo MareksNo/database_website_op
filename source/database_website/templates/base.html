@@ -24,35 +24,15 @@
 </head>
 <header>
     <div class="head" align="center">
-        {% if request.endpoint!='users.login' and current_user.is_authenticated!=true %}
-            <a  href="{{ url_for('users.login') }}">
-                <button class="tablecontent">Login</button>
+        {% for url, endpoint in endpoints %}
+            {% if request.url_rule != endpoint %}
+                <a  href="{{ url }}">
+                <button class="tablecontent">{{ endpoint.split('.', 1)[1] }}</button>
             </a>
-        {% endif %}
-        {% if request.endpoint!='users.register' %}
-            <a  href="{{ url_for('users.register') }}">
-                <button class="tablecontent">Register</button>
-            </a>
-        {% endif %}
-        {% if request.endpoint!='core.home_page' %}
-            <a  href="{{ url_for('core.home_page') }}">
-                <button class="tablecontent">Home</button>
-            </a>
-        {% endif %}
-        {% if current_user.is_authenticated %}
-            {% if request.endpoint!='users.logout' %}
-                <a  href="{{ url_for('users.logout') }}">
-                    <button class="tablecontent">Logout</button>
-                </a>
             {% endif %}
-        {% endif %}
-        {% if current_user.is_authenticated %}
-            {% if request.endpoint!='products.new_product' %}
-                <a  href="{{ url_for('products.add_product') }}">
-                    <button class="tablecontent">Add Product</button>
-                </a>
-            {% endif %}
-        {% endif %}
+        {% endfor %}
+
+
     </div>
 </header>
 <body>

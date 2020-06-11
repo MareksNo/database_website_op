@@ -44,10 +44,41 @@ application = Application.create()
 def create_database():
     db.create_all()
 
+
+def has_no_empty_params(rule):
+    defaults = rule.defaults if rule.defaults is not None else ()
+    arguments = rule.arguments if rule.arguments is not None else ()
+    return len(defaults) >= len(arguments)
+
+
+def sitemap():
+    links = []
+    for rule in application.url_map.iter_rules():
+        # Filter out rules we can't navigate to in a browser
+        # and rules that require parameters
+        if "GET" in rule.methods and has_no_empty_params(rule):
+            url = flask.url_for(rule.endpoint, **(rule.defaults or {}))
+            links.append((url, rule.endpoint))
+    return links
+
+
+@application.context_processor
+def inject_endpoints():
+    return dict(endpoints=sitemap())
+
+
 application.run()
 
 
-# FIX MIGRATIONS, maybe figure out how to move create_database away
 
+'''
+To do:
 
-# Add a random object using a decimal value, if error - SQLAlchemy doesnt allow decimal in integer fields, else, forms does something wierd.
+Somehow split context_processor, sitemap and cli commands in seperate Files.
+Get requirements of a request
+
+ Add a random object using a decimal value, if error - SQLAlchemy doesnt allow decimal in integer fields, else, forms does something wierd.
+ FIX MIGRATIONS, maybe figure out how to move create_database away
+ 
+ So many things to do. Get to work me lol.
+'''
