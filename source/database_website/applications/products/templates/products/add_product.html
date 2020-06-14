@@ -1,19 +1,21 @@
 {% extends "base.html" %}
+
+{% from 'macros/_formhelpers.html' import render_field %}
+
 {% block content %}
 <h1 align="center">Create a new product!</h1>
      <div class="container">
         <form action="" method="post">
+            {{ form.hidden_tag() }}
             <div>
-                {{ form.product_name.label(class="form-control-label") }}
-                {{ form.product_name(class="form-control form-control-lg") }}
+                {{ render_field(form.product_name) }}
             </div>
-                {{ form.price.label(class="form-control-label") }}
-                {{ form.price(class="form-control form-control-lg") }}
+                {{ render_field(form.price) }}
             <div>
 
             </div>
 
-            <div class="form-group" class="btn btn-outline-info">
+            <div class="form-group">
                 <input type="submit" name="submit_product" class="btn btn-outline-info" value="Submit Product">
             </div>
         </form>

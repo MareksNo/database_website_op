@@ -4,6 +4,7 @@ from flask import Flask, render_template, url_for, flash, redirect, request
 from database_website.applications.products import forms
 from database_website.applications.products.models import Product
 from database_website.applications.views import FormViewMixin
+import database_website.applications.core.forms as core_forms
 
 
 from flask.views import MethodView
@@ -31,8 +32,7 @@ class AddProductView(MethodView, FormViewMixin):
             return redirect(url_for('core.home_page'))
 
         else:
-            flash('Whoops you did big messed up nonono')
-
+            return render_template(self.template_name, title=self.title, form=form)
 
 class DisplayProductView(MethodView):
     def get(self, product_id):
@@ -42,5 +42,19 @@ class DisplayProductView(MethodView):
 
 class SearchProductView(MethodView):
     def get(self, search_name):
-        products = Product.query.filter(Product.product_name.contains(search_name))
-        return render_template('products/search_product.html', title=search_name, products=products)
+        form = core_forms.ProductSearchForm()
+
+        products_product_name = Product.query.filter(Product.product_name.contains(search_name))
+        products_seller_username = Product.query.filter(Product.seller_username.contains(search_name))
+        products_matching_ids = Product.query.filter(Product.id_product == search_name)
+
+        all_products = [products_product_name, products_seller_username, products_matching_ids]
+        print(all_products[2].all())
+        return render_template('products/search_product.html', title=search_name, products=all_products, form=form)
+
+    def post(self, search_name):
+        form = core_forms.ProductSearchForm()
+
+        product_search = request.form.get('search_name')
+
+        return redirect(url_for('products.search_product', search_name=product_search, form=form))

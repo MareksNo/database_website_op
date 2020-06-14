@@ -1,0 +1,32 @@
+<header>
+    <!--
+    <div class="head" align="center">
+        {% for url, endpoint in endpoints %}
+            {% if request.endpoint != endpoint %}
+                <a  href="{{ url }}">
+                <button class="tablecontent">{{ endpoint.split('.', 1)[1] }}</button>
+            </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    -->
+    <div class="head" align="center">
+        {% for key, value in nav_bar.items() %}
+            {% if value['type'] == 0 and request.endpoint != value['endpoint'] %}
+                <a href="{{ url_for(value['endpoint']) }}">
+                    <button class="tablecontent">{{ key }}</button>
+                </a>
+            {% elif value['type'] == 1 and request.endpoint != value['endpoint'] and current_user.is_authenticated == False %}
+                <a href="{{ url_for(value['endpoint']) }}">
+                    <button class="tablecontent">{{ key }}</button>
+                </a>
+            {% elif value['type'] == 2 and request.endpoint != value['endpoint'] and current_user.is_authenticated == True %}
+                <a href="{{ url_for(value['endpoint']) }}">
+                    <button class="tablecontent">{{ key }}</button>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</header>
+{% block base %}
+{% endblock %}

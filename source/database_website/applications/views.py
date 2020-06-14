@@ -5,7 +5,6 @@ class FormViewMixin:
     form_class = None
     template_name = None
     title = None
-    current_page = None
 
     def get_form_class(self):
         return self.form_class

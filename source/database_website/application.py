@@ -1,6 +1,8 @@
 import flask
 
 from database_website.extensions.database import db
+from database_website.properties import navigation_bar
+
 
 class Application(flask.Flask):
     def load_configuration(self):
@@ -39,7 +41,6 @@ class Application(flask.Flask):
 application = Application.create()
 
 
-
 @application.cli.command()
 def create_database():
     db.create_all()
@@ -67,18 +68,27 @@ def inject_endpoints():
     return dict(endpoints=sitemap())
 
 
-application.run()
+@application.context_processor
+def inject_navigation():
+    return dict(nav_bar=navigation_bar)
 
+
+application.run()
 
 
 '''
 To do:
 
 Somehow split context_processor, sitemap and cli commands in seperate Files.
-Get requirements of a request
+Get requirements of a request // Possible solution 
+https://stackoverflow.com/questions/5489649/check-if-a-function-has-a-decorator - Still doesn't solve a different issue
 
- Add a random object using a decimal value, if error - SQLAlchemy doesnt allow decimal in integer fields, else, forms does something wierd.
- FIX MIGRATIONS, maybe figure out how to move create_database away
+Add a random object using a decimal value, if error - SQLAlchemy doesnt allow decimal in integer fields,
+else, forms does something wierd.
+
+FIX MIGRATIONS, maybe figure out how to move create_database away
  
- So many things to do. Get to work me lol.
+Fix add_product, form not validating, go figure // Fixed, hidden_tag() argument was missing
+ 
+So many things to do. Get to work me lol.
 '''

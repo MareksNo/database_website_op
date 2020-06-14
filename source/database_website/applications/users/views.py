@@ -25,7 +25,7 @@ class RegistrationView(MethodView, FormViewMixin):
             return redirect(url_for('users.login'))
         else:
             flash(f'Please Check your form', category='danger')
-            return render_template(self.template_name, title=self.title, form=self.form_class)
+            return render_template(self.template_name, title=self.title, form=form)
 
 
 class LoginView(MethodView, FormViewMixin):
@@ -43,8 +43,7 @@ class LoginView(MethodView, FormViewMixin):
                 return redirect(url_for('core.home_page'))
 
             except LoginException as exception:
-                print(form.password.errors)
-                flash(message=str(exception), category='danger')
+                print(str(exception))
 
         flash('Wrong Credentials!', category='danger')
         return render_template(self.template_name, title=self.title, form=form)

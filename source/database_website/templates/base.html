@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
+{% extends "nav_bar.html" %}
+
+{% block base %}
 <html lang="en">
-
-
 
 <head>
 
@@ -22,19 +24,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </head>
-<header>
-    <div class="head" align="center">
-        {% for url, endpoint in endpoints %}
-            {% if request.url_rule != endpoint %}
-                <a  href="{{ url }}">
-                <button class="tablecontent">{{ endpoint.split('.', 1)[1] }}</button>
-            </a>
-            {% endif %}
-        {% endfor %}
-
-
-    </div>
-</header>
 <body>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -50,3 +39,4 @@
 
 </body>
 </html>
+{% endblock %}

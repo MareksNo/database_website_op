@@ -10,8 +10,22 @@ class HomePageView(MethodView, FormViewMixin):
 
     def get(self):
         form = forms.ProductSearchForm()
-        products = Product.query.all()
-        return render_template('core/home.html', title='Home',  products=products, form=form)
+
+        page = request.args.get('page', 1, type=int)
+        products = Product.query.paginate(page, 20, False)
+
+        next_url = url_for('core.home_page', page=products.next_num) \
+            if products.has_next else None
+
+        prev_url = url_for('core.home_page', page=products.prev_num) \
+            if products.has_prev else None
+
+        return render_template('core/home.html',
+                               title='Home',
+                               products=products.items,
+                               form=form,
+                               next_url=next_url,
+                               prev_url=prev_url)
 
     def post(self):
 
