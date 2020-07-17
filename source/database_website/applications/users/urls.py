@@ -23,3 +23,8 @@ blueprint.add_url_rule(
     rule='/logout/',
     view_func=views.LogoutView.as_view('logout'),
 )
+
+blueprint.add_url_rule(
+    rule='/users/profile_view/<user_id>',
+    view_func=views.UserProfileView.as_view('user-profile'),
+)

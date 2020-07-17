@@ -55,8 +55,19 @@ class LogoutView(MethodView):
     ]
 
     def get(self):
-        return render_template('users/logout.html', title=f'{current_user.username} Logout', current_page='logout')
+        return render_template('users/logout.html', title=f'{current_user.username} Logout')
 
     def post(self):
         logout_user()
         return redirect(url_for('users.login'))
+
+
+class UserProfileView(MethodView):
+    def get(self, user_id):
+        user = models.User.query.get_or_404(user_id)
+
+        return render_template('users/user_profile.html', title=f'{user.username} Profile', user=user)
+
+
+class HomeView(MethodView):
+    pass

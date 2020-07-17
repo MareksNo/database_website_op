@@ -1,55 +1,33 @@
 {% extends "base.html" %}
+
+{% from 'macros/_formhelpers.html' import render_field %}
+
 {% block content %}
     <div class="container" align="center">
         <fieldset class="form-group">
             <div>
                 <form action="" method="post">
-                    {{ form.search_name.label }}
-                    {{ form.search_name }}
+                    {{ form.hidden_tag() }}
+                    {{ render_field(form.search_name) }}
+                    {{ render_field(form.search_type) }}
                     <input type="submit" name="search_product" class="btn btn-outline-info" value="Search">
                 </form>
             </div>
         </fieldset>
     </div>
     <body>
-        {% if products[2].all() != [] %}
-            <div>
-                <h1>Products matching this id: </h1>
-                {% for product in products[2] %}
-                    <div class="content-section">
+        {% if products %}
+        <h2>Search results for {{ search_name }} under the {{ search_type }} category.</h2>
+            {% for product in products %}
+                <div class="content-section">
                         <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
                         <div>{{ product.price }}$</div>
                         <div>{{ product.seller.username }}</div>
                     </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% if products[0].all() != [] %}
-            <div>
-                <h1>Products using this keyword:</h1>
-                {% for product in products[0] %}
-                    <div class="content-section">
-                        <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
-                        <div>{{ product.price }}$</div>
-                        <div>{{ product.seller.username }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% if products[1].all() != [] %}
-            <div>
-                <h1>Products by Sellers:</h1>
-                {% for product in products[1] %}
-                    <div class="content-section">
-                        <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
-                        <div>{{ product.price }}$</div>
-                        <div>{{ product.seller.username }}</div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        {% if products[1].all() == [] and products[2].all() == [] and products[0].all() == [] %}
+            {% endfor %}
+        {% else %}
             <h1 align="center">No Products Found!</h1>
         {% endif %}
+        {% include "get_pages.html" %}
     </body>
 {% endblock %}

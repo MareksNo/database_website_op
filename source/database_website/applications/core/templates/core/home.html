@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% from 'macros/_formhelpers.html' import render_field %}
+
 {% block content %}
 <body>
     <div align="center">
@@ -7,8 +10,10 @@
             <fieldset class="form-group">
                 <div>
                     <form action="" method="post">
-                        {{ form.search_name.label }}
-                        {{ form.search_name }}
+                        {{ form.hidden_tag() }}
+                        {{ render_field(form.search_name) }}
+                        {{ render_field(form.search_type) }}
+
                         <input type="submit" name="search_product" class="btn btn-outline-info" value="Search">
                     </form>
                 </div>
@@ -20,7 +25,7 @@
         <div class="content-section">
             <h2><a href="{{ url_for('products.display_product', product_id=product.id_product) }}">{{ product.product_name }}</a></h2>
             <div>{{ product.price }}$</div>
-            <div>{{ product.seller.username }}</div>
+            <div><a href="{{ url_for('users.user-profile', user_id=product.seller.id) }}">{{ product.seller.username }}</a></div>
         </div>
         {% endfor %}
     </div>
@@ -29,5 +34,4 @@
         {% endfor %}
     {% include "get_pages.html" %}
 </body>
-</html>
 {% endblock %}

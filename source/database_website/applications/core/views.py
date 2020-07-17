@@ -28,7 +28,9 @@ class HomePageView(MethodView, FormViewMixin):
                                prev_url=prev_url)
 
     def post(self):
+        form = forms.ProductSearchForm()
 
         product_search = request.form.get('search_name')
+        product_type = request.form.get('search_type')
 
-        return redirect(url_for('products.search_product', search_name=product_search))
+        return redirect(url_for('products.search_product', search_name=product_search, search_type=product_type))

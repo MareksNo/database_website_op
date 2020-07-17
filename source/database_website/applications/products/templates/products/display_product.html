@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% from 'macros/_formhelpers.html' import render_field %}
+
 {% block content %}
 <body>
     <div align="center">
@@ -11,7 +14,16 @@
         <div>
             Seller {{ product.seller.username }}
         </div>
+        <div>
+            Description {{ product.description }}
+        </div>
     </font>
+    {% if current_user == product.seller %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            {{ form.delete(class="form-control form-control-lg") }}
+        </form>
+    {% endif %}
 </body>
 </html>
 {% endblock %}

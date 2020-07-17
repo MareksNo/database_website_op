@@ -1,7 +1,13 @@
-from database_website.application import application
+from flask import Blueprint
+
 from database_website.extensions.database import db
 
+blueprint = Blueprint(
+    name='commands',
+    import_name=__name__,
+)
 
-@application.cli.command()
+
+@blueprint.cli.command()
 def create_database():
     db.create_all()

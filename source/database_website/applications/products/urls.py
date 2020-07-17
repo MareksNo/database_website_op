@@ -19,6 +19,6 @@ blueprint.add_url_rule(
 )
 
 blueprint.add_url_rule(
-    rule='/product/search/<search_name>',
+    rule='/product/search/<search_name>/<search_type>',
     view_func=views.SearchProductView.as_view('search_product'),
 )

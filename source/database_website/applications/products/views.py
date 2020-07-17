@@ -26,7 +26,9 @@ class AddProductView(MethodView, FormViewMixin):
 
             product = Product.add_product(product_name=form.product_name.data,
                                           price=form.price.data,
-                                          seller_username=current_user.username)
+                                          seller_username=current_user.username,
+                                          description=form.description.data,
+                                          )
 
             flash('Added a product successfully!', category='success')
             return redirect(url_for('core.home_page'))
@@ -34,27 +36,55 @@ class AddProductView(MethodView, FormViewMixin):
         else:
             return render_template(self.template_name, title=self.title, form=form)
 
+
 class DisplayProductView(MethodView):
     def get(self, product_id):
+        form = forms.DeleteProductForm()
         product = Product.query.get_or_404(product_id)
-        return render_template('products/display_product.html', title=product.product_name, product=product)
+        return render_template('products/display_product.html', title=product.product_name, product=product, form=form)
+
+    def post(self, product_id):
+        form = forms.DeleteProductForm()
+        product = Product.query.get_or_404(product_id)
+
+        if form.delete.data:
+            product.delete_product()
+            return 'Product Has Been Deleted'
+
+    # Optimize this
 
 
 class SearchProductView(MethodView):
-    def get(self, search_name):
+    def get(self, search_name, search_type):
         form = core_forms.ProductSearchForm()
 
-        products_product_name = Product.query.filter(Product.product_name.contains(search_name))
-        products_seller_username = Product.query.filter(Product.seller_username.contains(search_name))
-        products_matching_ids = Product.query.filter(Product.id_product == search_name)
+        page = request.args.get('page', 1, type=int)
+        all_results = form.get_results(search_name=search_name, search_type=search_type, page=page)
 
-        all_products = [products_product_name, products_seller_username, products_matching_ids]
-        print(all_products[2].all())
-        return render_template('products/search_product.html', title=search_name, products=all_products, form=form)
+        next_url = url_for('products.search_product', page=all_results.next_num, search_name=search_name,
+                           search_type=search_type) \
+            if all_results.has_next else None
 
-    def post(self, search_name):
+        prev_url = url_for('products.search_product', page=all_results.prev_num, search_name=search_name,
+                           search_type=search_type) \
+            if all_results.has_prev else None
+        #  Possible optimisation needed
+
+        return render_template('products/search_product.html',
+                               title=search_name,
+                               products=all_results.items,
+                               form=form,
+                               search_type=search_type,
+                               search_name=search_name,
+                               next_url=next_url,
+                               prev_url=prev_url
+                               )
+
+    def post(self, search_name, search_type):
         form = core_forms.ProductSearchForm()
 
         product_search = request.form.get('search_name')
+        product_type = request.form.get('search_type')
 
-        return redirect(url_for('products.search_product', search_name=product_search, form=form))
+        return redirect(url_for('products.search_product', search_name=product_search, search_type=product_type,
+                                form=form))
